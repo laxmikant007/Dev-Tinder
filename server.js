@@ -1,28 +1,19 @@
-require("dotenv").config();
-const express  = require("express");
-const cors  = require("cors");
-const morgan  = require("morgan");
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import "dotenv/config";
+import response from "./src/helpers/response.js";
+import { ConnectDB } from "./src/DB/db.js";
 const env = process.env;
+import router from "./src/routes/Api/api.js"
 
-const app = express();
-const PORT  = env.PORT || 8080;
+export const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(cors());
 app.use(morgan("dev"));
+app.use(response);
+app.use("/api/v1", router);
 
-app.use("/api", (req, res)=>{
-    res.status(200).send({status : 1 , message : `Api Router Working Fine!!`});
-});
-
-app.use("/", (req, res)=>{
-    res.status(200).send({status : 1 , message : `Server is Running on PORT : ${PORT}`});
-})
-
-
-app.listen(PORT, ()=>{
-    console.log(`Server is running on http://localhost:${PORT}`);
-})
-
-
+app.use("/", (req, res)=>{res.success(`Server is LIVE 🟢🟢`)});
